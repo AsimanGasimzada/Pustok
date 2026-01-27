@@ -1,0 +1,6 @@
+﻿namespace Pustok.Core.Entites.Common;
+
+public abstract class BaseEntity
+{
+    public Guid Id { get; set; }
+}
