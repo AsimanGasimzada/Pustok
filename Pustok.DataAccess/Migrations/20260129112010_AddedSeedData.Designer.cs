@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pustok.DataAccess.Contexts;
 
@@ -11,9 +12,11 @@ using Pustok.DataAccess.Contexts;
 namespace Pustok.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260129112010_AddedSeedData")]
+    partial class AddedSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,38 +251,6 @@ namespace Pustok.DataAccess.Migrations
                         {
                             Id = new Guid("51e03370-dd1b-4b8d-aa74-fab5d463cf3d"),
                             Name = "Default Category"
-                        });
-                });
-
-            modelBuilder.Entity("Pustok.Core.Entites.Gender", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Genders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("491ce33b-1749-4964-b3e7-28ca163e4a6f"),
-                            Name = "Male"
-                        },
-                        new
-                        {
-                            Id = new Guid("5c08bb40-5462-4625-b9e0-47a9d4544990"),
-                            Name = "Female"
-                        },
-                        new
-                        {
-                            Id = new Guid("b92e8dda-8c53-4b56-810a-fb5b1061e18f"),
-                            Name = "Mechanical"
                         });
                 });
 

@@ -1,24 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Pustok.Core.Entites;
 using Pustok.Core.Entites.Common;
+using Pustok.DataAccess.ContextInitalizers;
+using Pustok.DataAccess.Helpers;
 using Pustok.DataAccess.Interceptors;
 using System.Reflection;
 
 namespace Pustok.DataAccess.Contexts;
 
-internal class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : DbContext(options)
+internal class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : IdentityDbContext<AppUser, AppRole, string>(options)
 {
 
 
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Gender> Genders { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        modelBuilder.Entity<Product>().HasQueryFilter(p => !p.IsDeleted);
 
+        modelBuilder.AddSeedData();
         base.OnModelCreating(modelBuilder);
     }
 

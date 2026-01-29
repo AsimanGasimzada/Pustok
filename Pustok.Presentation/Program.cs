@@ -1,12 +1,13 @@
 using Pustok.DataAccess.ServiceRegistrations;
 using Pustok.Business.ServiceRegistrations;
 using Pustok.Presentation.Middlewares;
+using Pustok.DataAccess.Abstractions;
 
 namespace Pustok.Presentation;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ public class Program
 
 
 
+
         //builder.Services.AddDbContext<AppDbContext>
 
         builder.Services.AddDataAccessServices(builder.Configuration);
@@ -35,6 +37,11 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        var scope = app.Services.CreateScope();
+        var initalizer = scope.ServiceProvider.GetRequiredService<IContextInitalizer>();
+
+        await initalizer.InitDatabaseAsync();
 
         app.UseMiddleware<GlobalExceptionHandler>();
 
@@ -54,6 +61,6 @@ public class Program
 
         app.MapControllers();
 
-        app.Run();
+        await app.RunAsync();
     }
 }
