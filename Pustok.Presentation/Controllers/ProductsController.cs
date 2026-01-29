@@ -18,23 +18,23 @@ public class ProductsController(IProductService _service) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] ProductCreateDto dto)
     {
-        await _service.CreateAsync(dto);
-        return Ok("Created");
+        var result = await _service.CreateAsync(dto);
+        return Ok(result);
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromForm] ProductUpdateDto dto)
     {
-        await _service.UpdateAsync(dto);
-        return Ok("Updated");
+        var result = await _service.UpdateAsync(dto);
+        return Ok(result);
     }
 
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        await _service.DeleteAsync(id);
-        return Ok("Deleted");
+        var result = await _service.DeleteAsync(id);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]

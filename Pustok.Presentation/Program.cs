@@ -1,5 +1,6 @@
 using Pustok.DataAccess.ServiceRegistrations;
 using Pustok.Business.ServiceRegistrations;
+using Pustok.Presentation.Middlewares;
 
 namespace Pustok.Presentation;
 
@@ -14,6 +15,14 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
 
+        builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+        {
+            //builder.WithOrigins("http://127.0.0.1:5500/", "http://127.0.0.1:5501/")
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        }));
+
 
 
         //builder.Services.AddDbContext<AppDbContext>
@@ -27,6 +36,8 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseMiddleware<GlobalExceptionHandler>();
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
@@ -37,6 +48,8 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+        app.UseCors("MyPolicy");
 
 
         app.MapControllers();

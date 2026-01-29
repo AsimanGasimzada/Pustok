@@ -18,9 +18,16 @@ internal class Repository<T>(AppDbContext _context) : IRepository<T> where T : B
         _context.Set<T>().Remove(entity);
     }
 
-    public IQueryable<T> GetAll()
+    public IQueryable<T> GetAll(bool ignoreQueryFilter = false)
     {
-        return _context.Set<T>();  //Select * from Products )include(x=>x.Category) .OrderBy(x=>x.Name)
+
+        var query = _context.Set<T>().AsQueryable();
+
+        if (ignoreQueryFilter)
+            query = query.IgnoreQueryFilters();
+
+
+        return query;  //Select * from Products )include(x=>x.Category) .OrderBy(x=>x.Name)
     }
 
     public async Task<T?> GetByIdAsync(Guid id)
