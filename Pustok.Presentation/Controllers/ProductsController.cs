@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pustok.Business.Dtos;
 using Pustok.Business.Services.Abstractions;
 
@@ -6,6 +7,7 @@ namespace Pustok.Presentation.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(Roles = "Member")]
 public class ProductsController(IProductService _service) : ControllerBase
 {
     [HttpGet]
@@ -41,6 +43,12 @@ public class ProductsController(IProductService _service) : ControllerBase
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var product = await _service.GetAsync(id);
+        return Ok(product);
+    }
+    [HttpGet("[action]/{id}")]
+    public async Task<IActionResult> GetUpdateProduct([FromRoute] Guid id)
+    {
+        var product = await _service.GetUpdatedDtoAsync(id);
         return Ok(product);
     }
 }

@@ -1,7 +1,9 @@
-using Pustok.DataAccess.ServiceRegistrations;
+using Microsoft.AspNetCore.Mvc;
+using Pustok.Business.Dtos;
 using Pustok.Business.ServiceRegistrations;
-using Pustok.Presentation.Middlewares;
 using Pustok.DataAccess.Abstractions;
+using Pustok.DataAccess.ServiceRegistrations;
+using Pustok.Presentation.Middlewares;
 
 namespace Pustok.Presentation;
 
@@ -13,7 +15,28 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var errors = context.ModelState
+                    .Where(x => x.Value!.Errors.Count > 0)
+                    .Select(x => new
+                    {
+                        Errors = x.Value!.Errors.Select(e => e.ErrorMessage)
+                    });
+
+                ResultDto resultDto = new()
+                {
+                    IsSucced = false,
+                    StatusCode = 400,
+                    Message = string.Join(", ", errors.SelectMany(x => x.Errors))
+                };
+
+                return new BadRequestObjectResult(resultDto);
+            };
+        });
+        
         builder.Services.AddOpenApi();
 
         builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
@@ -30,7 +53,7 @@ public class Program
         //builder.Services.AddDbContext<AppDbContext>
 
         builder.Services.AddDataAccessServices(builder.Configuration);
-        builder.Services.AddBusinessServices();
+        builder.Services.AddBusinessServices(builder.Configuration);
 
 
         builder.Services.AddEndpointsApiExplorer();

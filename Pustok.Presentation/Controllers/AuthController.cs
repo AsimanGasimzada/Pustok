@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Pustok.Business.Dtos.UserDtos;
 using Pustok.Business.Services.Abstractions;
+using System.Security.Claims;
 
 namespace Pustok.Presentation.Controllers;
 
@@ -18,4 +19,22 @@ public class AuthController(IAuthService _service) : ControllerBase
 
         return Ok(result);
     }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+
+        var result = await _service.LoginAsync(dto);
+
+        return Ok(result);
+    }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> RefreshToken(string token)
+    {
+
+        var result = await _service.RefreshTokenAsync(token);
+
+        return Ok(result);
+    }
+
+
 }

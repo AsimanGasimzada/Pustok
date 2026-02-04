@@ -28,7 +28,7 @@ internal class ProductService(IProductRepository _repository, IMapper _mapper, I
         var product = await _repository.GetByIdAsync(id);
 
         if (product is null)
-            throw new NotFoundException("Project is not found");
+            throw new NotFoundException("Product is not found");
 
         _repository.Delete(product);
         await _repository.SaveChangesAsync();
@@ -41,7 +41,7 @@ internal class ProductService(IProductRepository _repository, IMapper _mapper, I
 
     public async Task<ResultDto<List<ProductGetDto>>> GetAllAsync()
     {
-        var products = await _repository.GetAll(true).Include(x => x.Category).ToListAsync();
+        var products = await _repository.GetAll().Include(x => x.Category).ToListAsync();
 
         var dtos = _mapper.Map<List<ProductGetDto>>(products);
 
@@ -57,6 +57,18 @@ internal class ProductService(IProductRepository _repository, IMapper _mapper, I
             throw new NotFoundException("Project is not found");
 
         var dto = _mapper.Map<ProductGetDto>(product);
+
+        return new(dto);
+    }
+
+    public async Task<ResultDto<ProductUpdateDto>> GetUpdatedDtoAsync(Guid id)
+    {
+        var product = await _repository.GetByIdAsync(id);
+
+        if (product is null)
+            throw new NotFoundException("Project is not found");
+
+        var dto = _mapper.Map<ProductUpdateDto>(product);
 
         return new(dto);
     }

@@ -1,6 +1,11 @@
 @Pustok.Presentation_HostAddress = http://localhost:5043
+@jwtToken=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJGdWxsbmFtZSI6ImZhdGltYSIsIlVzZXJuYW1lIjoiZmF0aW1hIiwiRW1haWwiOiJmYXRpbWFAZ21haWwuY29tIiwibmJmIjoxNzcwMDMyMzAwLCJleHAiOjE3NzAwMzU5MDAsImlzcyI6ImxvY2FsaG9zdDo2MDYwIiwiYXVkIjoibG9jYWxob3N0OjUwNTAifQ.2xF2hfKgNNKcUpG1NMbTT1cp46c5xpy3tWLjHE5MqJk
 
-GET {{Pustok.Presentation_HostAddress}}/weatherforecast/
+GET https://localhost:7273/api/Categories
 Accept: application/json
 
 ###
+
+
+GET https://localhost:7273/api/Products
+Authorization: {{jwtToken}}

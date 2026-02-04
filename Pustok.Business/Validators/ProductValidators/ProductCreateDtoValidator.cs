@@ -13,8 +13,8 @@ public class ProductCreateDtoValidator : AbstractValidator<ProductCreateDto>
         RuleFor(x => x.Price).NotNull().GreaterThanOrEqualTo(0).LessThanOrEqualTo(9999999);
 
 
-        RuleFor(x => x.Image).Must(x => x.CheckSize(2)).WithMessage("Seklin maksimum olcusu 2 mb olmalidir")
-                            .Must(x => x.CheckType("image")).WithMessage("Yalniz sekil formatinda data gondere bilersiniz");
+        RuleFor(x => x.Image).Must(x => x?.CheckSize(2) ?? false).WithMessage("Seklin maksimum olcusu 2 mb olmalidir")
+                            .Must(x => x?.CheckType("image") ?? false).WithMessage("Yalniz sekil formatinda data gondere bilersiniz");
     }
 }
 
